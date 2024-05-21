@@ -22,6 +22,8 @@ bot.on("callback_query", function (query) {
             callback_query_id: query.id,
             url: gameurl
         });
+
+        console.log(query.from.first_name);
     }
 });
 bot.on("inline_query", function (iq) {
