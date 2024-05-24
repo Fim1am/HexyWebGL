@@ -87,18 +87,35 @@
 
       loadingBar.style.display = "block";
 
+        function viewporthandler(object) {
+            if (!window.Telegram.WebApp.isExpanded) {
+                window.Telegram.WebApp.expand()
+            }
+        }
+
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
+
           loadingBar.style.display = "none";
+
+            if (window && window.Telegram && window.Telegram.WebApp) {
+
+                window.Telegram.WebApp.onEvent('viewportChanged', viewporthandler)
+            }
+            else {
+                console.log('no app to subscribe');
+            }
+
         }).catch((message) => {
           alert(message);
         });
       };
-      document.body.appendChild(script);
+        document.body.appendChild(script);
+
     </script>
   </body>
 </html>
