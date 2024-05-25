@@ -127,7 +127,11 @@
       };
         document.body.appendChild(script);
 		
-		const overflow = 1
+		<!-- document.body.height = 'auto', -->
+		<!-- document.documentElement.clientHeight = 'auto'; -->
+		<!-- document.documentElement.style.overflow = 'hidden'; -->
+		
+		const overflow = 100
 		document.body.style.overflowY = 'hidden'
 		document.body.style.marginTop = `${overflow}px`
 		document.body.style.height = window.innerHeight + overflow + "px"
