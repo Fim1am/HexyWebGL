@@ -88,10 +88,29 @@
       loadingBar.style.display = "block";
 
         function viewporthandler(object) {
-            if (!window.Telegram.WebApp.isExpanded) {
-                window.Telegram.WebApp.expand()
+            /*if (!window.Telegram.WebApp.isExpanded) {*/
+            window.Telegram.WebApp.expand();;
+            //}
+        }
+
+        var sbcIntervalId = null;
+
+        function tryAppViewport() {
+            if (window && window.Telegram && window.Telegram.WebApp) {
+
+                window.Telegram.WebApp.expand();
+
+                window.Telegram.WebApp.onEvent('viewportChanged', viewporthandler);
+
+                clearInterval(sbcIntervalId);
+
+                console.log('subscribed to viewport change');
+            }
+            else {
+                console.log('no app to subscribe');
             }
         }
+
 
       var script = document.createElement("script");
       script.src = loaderUrl;
@@ -100,15 +119,9 @@
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
 
-          loadingBar.style.display = "none";
+            loadingBar.style.display = "none";
 
-            if (window && window.Telegram && window.Telegram.WebApp) {
-
-                window.Telegram.WebApp.onEvent('viewportChanged', viewporthandler)
-            }
-            else {
-                console.log('no app to subscribe');
-            }
+            sbcIntervalId = setInterval(tryAppViewport, 500);
 
         }).catch((message) => {
           alert(message);
