@@ -1,23 +1,66 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Hex Merge</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="manifest" href="manifest.webmanifest">
-  </head>
-  <body>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+
+        window.onload = function () {
+            if (window && window.Telegram && window.Telegram.WebApp) {
+
+                window.Telegram.WebApp.expand();
+
+                window.Telegram.WebApp.ready();
+
+                console.log('subscribed to viewport change');
+            }
+            else {
+                console.log('no app to subscribe');
+            }
+        };
+
+        const overflow = 100
+        document.body.style.overflowY = 'hidden'
+        document.body.style.marginTop = `${overflow}px`
+        document.body.style.height = window.innerHeight + overflow + "px"
+        document.body.style.paddingBottom = `${overflow}px`
+        window.scrollTo(0, overflow)
+
+        let ts = null;
+        const onTouchStart = (e) => {
+            ts = e.touches[0].clientY
+        }
+        const onTouchMove = (e) => {
+            if (scrollableEl) {
+                const scroll = scrollableEl.scrollTop
+                const te = e.changedTouches[0].clientY
+                if (scroll <= 0 && ts != null && ts < te) {
+                    e.preventDefault()
+                }
+            } else {
+                e.preventDefault()
+            }
+        }
+        document.documentElement.addEventListener('touchstart', onTouchStart, { passive: false })
+        document.documentElement.addEventListener('touchmove', onTouchMove, { passive: false })
+
+    </script>
+</head>
+<body>
     <div id="unity-container">
-      <canvas id="unity-canvas" width=386 height=592 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+        <canvas id="unity-canvas" width=386 height=592 tabindex="-1"></canvas>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
         </div>
-      </div>
-      <div id="unity-warning"> </div>
+        <div id="unity-warning"> </div>
     </div>
     <script>
       window.addEventListener("load", function () {
@@ -40,7 +83,7 @@
       // user.
       function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+          warningBanner.style.display = 'none';//warningBanner.children.length ? 'block' : 'none';
         }
         var div = document.createElement('div');
         div.innerHTML = msg;
@@ -86,18 +129,28 @@
 
       loadingBar.style.display = "block";
 
+
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
+            progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
-          loadingBar.style.display = "none";
+            loadingBar.style.display = "none";
+
+            document.addEventListener("touchmove", function (event) {
+                event.preventDefault();
+            },
+                {
+                    passive: false
+                });
+
         }).catch((message) => {
           alert(message);
         });
       };
-      document.body.appendChild(script);
+        document.body.appendChild(script);
+
     </script>
-  </body>
+</body>
 </html>
