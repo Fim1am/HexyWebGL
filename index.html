@@ -1,34 +1,13 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Hex Merge</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="manifest" href="manifest.webmanifest">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-
-        window.onload = function () {
-            if (window && window.Telegram && window.Telegram.WebApp) {
-
-                window.Telegram.WebApp.expand();
-
-                console.log('subscribed to viewport change');
-            }
-            else {
-                console.log('no app to subscribe');
-            }
-        };
-
-    </script>
-    <style>
-        body {
-            touch-action: none !important;
-        }
-    </style>
-</head>
+  </head>
   <body>
     <div id="unity-container">
       <canvas id="unity-canvas" width=386 height=592 tabindex="-1"></canvas>
@@ -61,7 +40,7 @@
       // user.
       function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
-          warningBanner.style.display = 'none';//warningBanner.children.length ? 'block' : 'none';
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
         var div = document.createElement('div');
         div.innerHTML = msg;
@@ -107,28 +86,18 @@
 
       loadingBar.style.display = "block";
 
-
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-            progressBarFull.style.width = 100 * progress + "%";
+          progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
-            loadingBar.style.display = "none";
-
-            document.addEventListener("touchmove", function (event) {
-                event.preventDefault();
-            },
-                {
-                    passive: false
-                });
-
+          loadingBar.style.display = "none";
         }).catch((message) => {
           alert(message);
         });
       };
-        document.body.appendChild(script);
-
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
