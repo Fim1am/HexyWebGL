@@ -16,13 +16,6 @@
                 window.Telegram.WebApp.expand();
 
                 console.log('subscribed to viewport change');
-
-                document.addEventListener("touchmove", function (event) {
-                    event.preventDefault();
-                },
-                    {
-                        passive: false
-                    });
             }
             else {
                 console.log('no app to subscribe');
@@ -30,6 +23,11 @@
         };
 
     </script>
+    <style>
+        body {
+            touch-action: none !important;
+        }
+    </style>
 </head>
   <body>
     <div id="unity-container">
@@ -109,42 +107,21 @@
 
       loadingBar.style.display = "block";
 
-        function viewporthandler(object) {
-            /*if (!window.Telegram.WebApp.isExpanded) {*/
-            window.Telegram.WebApp.expand();;
-            //}
-        }
-
-        var sbcIntervalId = null;
-
-        function tryAppViewport() {
-            if (window && window.Telegram && window.Telegram.WebApp) {
-
-                window.Telegram.WebApp.expand();
-
-                window.Telegram.WebApp.onEvent('viewportChanged', viewporthandler);
-
-                clearInterval(sbcIntervalId);
-
-                console.log('subscribed to viewport change');
-            }
-            else {
-                console.log('no app to subscribe');
-            }
-        }
-
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
             progressBarFull.style.width = 100 * progress + "%";
-            //progressBarFull.style.display = "none";
         }).then((unityInstance) => {
-
             loadingBar.style.display = "none";
 
-            //sbcIntervalId = setInterval(tryAppViewport, 500);
+            document.addEventListener("touchmove", function (event) {
+                event.preventDefault();
+            },
+                {
+                    passive: false
+                });
 
         }).catch((message) => {
           alert(message);
