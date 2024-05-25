@@ -15,11 +15,14 @@
 
                 window.Telegram.WebApp.expand();
 
-                //window.Telegram.WebApp.onEvent('viewportChanged', viewporthandler);
-
-                //clearInterval(sbcIntervalId);
-
                 console.log('subscribed to viewport change');
+
+                document.addEventListener("touchmove", function (event) {
+                    event.preventDefault();
+                },
+                    {
+                        passive: false
+                    });
             }
             else {
                 console.log('no app to subscribe');
@@ -60,7 +63,7 @@
       // user.
       function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+          warningBanner.style.display = 'none';//warningBanner.children.length ? 'block' : 'none';
         }
         var div = document.createElement('div');
         div.innerHTML = msg;
@@ -135,8 +138,8 @@
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-            //progressBarFull.style.width = 100 * progress + "%";
-            progressBarFull.style.display = "none";
+            progressBarFull.style.width = 100 * progress + "%";
+            //progressBarFull.style.display = "none";
         }).then((unityInstance) => {
 
             loadingBar.style.display = "none";
